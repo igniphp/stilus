@@ -1,0 +1,33 @@
+{
+  "name": "igniphp/stilus",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dawid <krac> Kraczkowski",
+      "email": "dawid.kraczkowski@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.0",
+    "igniphp/framework": "^1.4",
+    "igniphp/storage": "^0.4.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=5.7.0",
+    "mockery/mockery": ">=0.9.4",
+    "phpunit/php-code-coverage": ">=4.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Stilus\\": "src/Stilus"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "StilusTest\\": "tests/"
+    }
+  }
+}
