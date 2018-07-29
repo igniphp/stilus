@@ -1,4 +1,4 @@
-# Stylus
+# Stilus
 
 ## Project setup
 ```
