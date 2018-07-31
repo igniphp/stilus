@@ -15,6 +15,10 @@ final class SayHello implements Controller
     {
         return Response::fromText("Hello {$request->getAttribute('name')}!");
     }
+
+    /*
+     * Initial commit
+     */
     public static function getRoute(): Route
     {
         return Route::get('/hello/{name}');
