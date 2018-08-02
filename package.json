@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "muse-ui": "^3.0.0-rc.6",
+    "read-yaml": "^1.1.0",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1"
   },

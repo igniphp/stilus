@@ -1,0 +1,25 @@
+paths:
+  config_dir: "./data/config"
+  database_dir: "./data/db"
+  modules_dir: "./data/modules"
+  themes_dir: "./data/themes"
+
+http_server:
+  enable_server: true
+  http_address: "0.0.0.0"
+  http_port: 8000
+# http_max_connections: 1000
+# http_max_requests: 50000
+# http_workers: 10
+  http_pid: "./data/server/stilus.pid"
+  http_log: "./data/server/stilus.log"
+
+development:
+  web_server:
+    host: "0.0.0.0"
+    port: 8090
+  build_dir: "./public"
+  css_source_map: true
+
+
+

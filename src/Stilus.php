@@ -2,11 +2,14 @@
 
 namespace Stilus;
 
-use Igni\Container\ServiceLocator;
 use Igni\Http\Application;
 use Igni\Http\Server;
+use Stilus\Exception\BootException;
 
-use Stilus\Hello\HelloModule;
+
+if (version_compare('7.1.0', PHP_VERSION, '>')) {
+    throw
+}
 
 /**
  * Keeps modules configuration and database
@@ -26,16 +29,16 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../vendor/autoload.php';
 // Bootstrap
 (new class {
 
-    private static function setupAutoload(): void
+    private function setupAutoload(): void
     {
         if (!file_exists(STILUS_VENDOR_AUTOLOADER)) {
-            throw new \RuntimeException('Vendor dir is missing. Did you forgot to run composer install?');
+            throw BootException::forMissingComposer();
         }
 
         require __DIR__ . '/../vendor/autoload.php';
     }
 
-    private static function getApplicationConfig(): array
+    private function getApplicationConfig(): array
     {
         static $configuration;
 
@@ -51,9 +54,9 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../vendor/autoload.php';
         return $configuration = parse_ini_file($applicationIni);
     }
 
-    private static function setupServer(): Server
+    private function setupServer(): Server
     {
-        $config = self::getApplicationConfig();
+        $config = $this->getApplicationConfig();
 
         if (!isset($config['http_port'])) {
             throw new \RuntimeException('http_port setting is missing in application.ini file.');
@@ -90,21 +93,21 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../vendor/autoload.php';
         return new Server($httpConfiguration);
     }
 
-    public static function main(): void
+    public function main(): void
     {
-        self::setupAutoload();
+        $this->setupAutoload();
 
-        $config = self::getApplicationConfig();
+        $config = $this->getApplicationConfig();
         $application = new Application();
         $application->extend(HelloModule::class);
 
         $server = null;
         if ($config['enable_server']) {
-            $server = self::setupServer();
+            $server = $this->setupServer();
         }
 
         $application->run($server);
     }
 
 // Run application in contained scope
-})::main();
+})->main();
