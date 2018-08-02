@@ -14,11 +14,11 @@ services:
 
   stilus_web:
     working_dir: /app
-      build:
-        context: ./docker/web
-      volumes:
-        - ".:/app"
-      expose:
-        - "8888"
-      ports:
-        - "8888:8888"
+    build:
+      context: ./docker/web
+    volumes:
+      - ".:/app"
+    expose:
+      - "8888"
+    ports:
+      - "8888:8888"
