@@ -1,9 +1,8 @@
 FROM node:9.11.1-alpine
 
-RUN npm install -g http-server
-
-COPY . /app
 WORKDIR /app
+
+COPY package*.json ./
 
 # install project dependencies
 RUN npm install
