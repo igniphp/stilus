@@ -1,6 +1,9 @@
-/.idea
 /.env
-/.git
-/vendor
-/node_modules
-/docker
+/.git/
+/.idea/
+/vendor/
+/node_modules/
+/docker/
+/docker-compose.yml
+.DS_Store
+

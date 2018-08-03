@@ -1,8 +1,8 @@
 paths:
-  config_dir: "./data/config"
-  database_dir: "./data/db"
-  modules_dir: "./data/modules"
-  themes_dir: "./data/themes"
+  config: "./data/config"
+  database: "./data/db"
+  modules: "./data/modules"
+  themes: "./data/themes"
 
 http_server:
   enable_server: true
@@ -18,8 +18,14 @@ development:
   web_server:
     host: "0.0.0.0"
     port: 8090
-  build_dir: "./public"
-  css_source_map: true
+  build:
+    dir: "./dist"
+    css_source_map: true
+    pages:
+      index: # Index page
+        entry: "src/Stilus.js" # Entry script for the page
+        template: "public/index.html" # Html template files
+        filename: "index.html" # Output file: ./dist/index.html
 
 
 
