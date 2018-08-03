@@ -5,10 +5,11 @@ namespace Stilus;
 use Igni\Http\Application;
 use Igni\Http\Server;
 use Stilus\Exception\BootException;
+use Stilus\Hello\HelloModule;
 
 
 if (version_compare('7.1.0', PHP_VERSION, '>')) {
-    throw
+
 }
 
 /**

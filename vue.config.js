@@ -12,5 +12,15 @@ module.exports = {
     css: {
         sourceMap: config.development.css_source_map || true,
         extract: false
+    },
+    pages: {
+        index: {
+            // entry for the page
+            entry: 'src/Stilus.js',
+            // the source template
+            template: 'src/index.html',
+            // output as dist/index.html
+            filename: 'index.html',
+        },
     }
 };
