@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "keywords": [],
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "authors": [
     {
       "name": "Dawid <krac> Kraczkowski",
@@ -13,7 +13,12 @@
   "require": {
     "php": ">=7.1.0",
     "igniphp/framework": "^1.4",
-    "igniphp/storage": "^0.4.2"
+    "igniphp/storage": "^0.4.2",
+    "igniphp/validation": "^1.1.0",
+    "symfony/yaml": "^4.1"
+  },
+  "scripts": {
+    "start": "php src/api/Stilus.php"
   },
   "require-dev": {
     "phpunit/phpunit": ">=5.7.0",
@@ -22,12 +27,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Stilus\\": "src/Stilus"
+      "Stilus\\": "src/api/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "StilusTest\\": "tests/"
+      "Stilus\\Tests\\": "tests/api/"
     }
   }
 }

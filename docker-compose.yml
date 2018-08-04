@@ -1,0 +1,26 @@
+version: '3'
+services:
+
+  stilus_api:
+    working_dir: /app
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    volumes:
+      - ".:/app"
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+
+  stilus_web:
+    working_dir: /app
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+    volumes:
+      - ".:/app"
+    expose:
+      - "8888"
+    ports:
+      - "8888:8888"

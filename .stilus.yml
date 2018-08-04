@@ -1,0 +1,48 @@
+paths:
+  config: "./data/config"
+  database: "./data/db"
+  modules: "./data/modules"
+  themes: "./data/themes"
+
+api:
+  enable_server: true
+  http_address: "0.0.0.0"
+  http_port: 8000
+# http_max_connections: 1000
+# http_max_requests: 50000
+# http_workers: 10
+  http_pid: "./data/server/stilus.pid"
+  http_log: "./data/server/stilus.log"
+
+dashboard:
+  web_server:
+    host: "0.0.0.0"
+    port: 8090
+  build:
+    dir: "./dist"
+    css_source_map: true
+    pages:
+      index: # Index page
+        entry: "src/dashboard/Stilus.js" # Entry script for the page
+        template: "public/index.html" # Html template files
+        filename: "index.html" # Output file: ./dist/index.html
+  tests:
+    coverage: true
+    coverage_match:
+      - "src/dashboard/**/*.{js,vue}"
+      - "!**/node_modules/**"
+      - "!**/vendor/**"
+    coverage_reporters:
+      - html
+      - json
+    coverage_dir: "./coverage/dashboard"
+    module_name_mapper:
+      ^@/(.*)$: "<rootDir>/src/dashboard/$1"
+    module_file_extensions:
+      - "js"
+      - "jsx"
+      - "ts"
+      - "tsx"
+      - "vue"
+    test_match:
+      - "**/tests/dashboard/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
