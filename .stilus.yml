@@ -38,6 +38,7 @@ dashboard:
     coverage_dir: "./coverage/dashboard"
     module_name_mapper:
       ^@/(.*)$: "<rootDir>/src/dashboard/$1"
+      less|css: "<rootDir>/tests/dashboard/assetsTransformer.js"
     module_file_extensions:
       - "js"
       - "jsx"
