@@ -2,25 +2,36 @@
   "name": "stylus",
   "version": "0.1.0",
   "private": true,
-  "license": "BSD-3-Clause",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "es6-promise": "^4.2.4",
+    "identity-obj-proxy": "^3.0.0",
     "muse-ui": "^3.0.0-rc.6",
     "read-yaml": "^1.1.0",
     "vue": "^2.5.16",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.1",
     "@vue/cli-plugin-babel": "^3.0.0-rc.5",
     "@vue/cli-plugin-eslint": "^3.0.0-rc.5",
+    "@vue/cli-plugin-unit-jest": "^3.0.0-rc.10",
     "@vue/cli-service": "^3.0.0-rc.5",
+    "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^23.0.1",
     "babel-plugin-import": "^1.8.0",
+    "jest-css-modules": "^1.1.0",
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
+    "ts-jest": "^23.1.2",
+    "vue-cli-plugin-vuex-module-generator": "^0.1.0",
     "vue-template-compiler": "^2.5.16"
   },
   "eslintConfig": {
@@ -46,5 +57,6 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "license": "BSD-3-Clause"
 }
