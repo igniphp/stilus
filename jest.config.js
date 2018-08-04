@@ -4,10 +4,10 @@ const config = yaml.sync('.stilus.yml');
 module.exports = {
   moduleFileExtensions: config.dashboard.tests.module_file_extensions,
   transform: {
-    '^.+\\.vue$': 'vue-jest',
-    '^.+\\.tsx?$': 'ts-jest',
-    "^.+\\.(css|less)$": "identity-obj-proxy",
-    '^.+\\.(vue|js)$': 'babel-jest'
+    ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
+    "^.+\\.vue$": "vue-jest",
+    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.(vue|js)$": "babel-jest"
   },
   moduleNameMapper: config.dashboard.tests.module_name_mapper,
   snapshotSerializers: [
