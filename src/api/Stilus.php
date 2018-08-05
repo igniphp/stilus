@@ -5,27 +5,26 @@ namespace Stilus;
 use Igni\Http\Application;
 use Igni\Http\Server;
 use Stilus\Exception\BootException;
-use Stilus\Hello\HelloModule;
+use Stilus\Platform\PlatformModule;
+use Symfony\Component\Yaml\Yaml;
+use Throwable;
 
 
 if (version_compare('7.1.0', PHP_VERSION, '>')) {
-
+    throw BootException::forInvalidPHPVersion(PHP_VERSION);
 }
 
-/**
- * Keeps modules configuration and database
- */
-const STILUS_DIR = __DIR__  . '/..';
+const STILUS_MODULES = [
+    PlatformModule::class
+];
 
-/**
- * Vendor directory path
- */
-const STILUS_VENDOR_DIR = __DIR__ . '/../vendor';
+const STILUS_DIR = __DIR__  . '/../..';
 
-/**
- * Composer autoloader file
- */
-const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../vendor/autoload.php';
+const STILUS_BASE_CONFIG = STILUS_DIR . '/.stilus.yml';
+
+const STILUS_VENDOR_DIR = __DIR__ . '/../../vendor';
+
+const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
 
 // Bootstrap
 (new class {
@@ -36,60 +35,56 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../vendor/autoload.php';
             throw BootException::forMissingComposer();
         }
 
-        require __DIR__ . '/../vendor/autoload.php';
+        require STILUS_VENDOR_AUTOLOADER;
     }
 
-    private function getApplicationConfig(): array
+    private function loadApplicationConfig(): array
     {
-        static $configuration;
-
-        if ($configuration !== null) {
-            return $configuration;
+        if (!is_readable(STILUS_BASE_CONFIG)) {
+            throw BootException::forMissingBaseConfiguration();
         }
 
-        $applicationIni = STILUS_DIR . '/.application.ini';
-        if (!is_readable($applicationIni)) {
-            throw new \RuntimeException('.application.ini file is missing. Did you remove it by accident?');
+        try {
+            return $configuration = Yaml::parseFile(STILUS_BASE_CONFIG);
+        } catch (Throwable $throwable) {
+            throw BootException::forInvalidBaseConfiguration($throwable);
         }
-
-        return $configuration = parse_ini_file($applicationIni);
     }
 
-    private function setupServer(): Server
+    private function setupServer(array $config): Server
     {
-        $config = $this->getApplicationConfig();
-
-        if (!isset($config['http_port'])) {
-            throw new \RuntimeException('http_port setting is missing in application.ini file.');
+        if (!isset($config['port'])) {
+            throw BootException::forMissingConfigurationOption('api.http_server.port');
         }
 
-        if (!isset($config['http_address'])) {
-            throw new \RuntimeException('http_address setting is missing in application.ini file.');
+        if (!isset($config['address'])) {
+            throw BootException::forMissingConfigurationOption('api.http_server.address');
         }
 
-        $httpConfiguration = new Server\HttpConfiguration($config['http_address'], (int) $config['http_port']);
+        $httpConfiguration = new Server\HttpConfiguration($config['address'], (int) $config['port']);
 
-        if (isset($config['http_max_connections'])) {
-            $httpConfiguration->setMaxConnections((int) $config['http_max_connections']);
+        if (isset($config['max_connections'])) {
+            $httpConfiguration->setMaxConnections((int) $config['max_connections']);
         }
 
-        if (isset($config['http_workers'])) {
-            $httpConfiguration->setWorkers((int) $config['http_workers']);
+        if (isset($config['workers'])) {
+            $httpConfiguration->setWorkers((int) $config['workers']);
         }
 
-        if (isset($config['http_max_requests'])) {
-            $httpConfiguration->setMaxRequests((int) $config['http_max_requests']);
+        if (isset($config['max_requests'])) {
+            $httpConfiguration->setMaxRequests((int) $config['max_requests']);
         }
 
-        if (isset($config['http_pid'])) {
-            $httpConfiguration->enableDaemon(STILUS_DIR . DIRECTORY_SEPARATOR . $config['http_pid']);
+        if (isset($config['pid_file'])) {
+            $httpConfiguration->enableDaemon(STILUS_DIR . DIRECTORY_SEPARATOR . $config['pid_file']);
         }
 
         if (isset($config['log_file'])) {
             $httpConfiguration->setLogFile(STILUS_DIR . DIRECTORY_SEPARATOR . $config['log_file']);
         }
 
-        define('STILUS_SERTVER_START', time());
+        define('STILUS_SERVER_ENABLED', true);
+        define('STILUS_SERVER_START', time());
 
         return new Server($httpConfiguration);
     }
@@ -98,15 +93,21 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../vendor/autoload.php';
     {
         $this->setupAutoload();
 
-        $config = $this->getApplicationConfig();
+        $config = $this->loadApplicationConfig();
         $application = new Application();
-        $application->extend(HelloModule::class);
 
-        $server = null;
-        if ($config['enable_server']) {
-            $server = $this->setupServer();
+        foreach (STILUS_MODULES as $module) {
+            $application->extend($module);
         }
 
+        $server = null;
+        if (isset($config['api']) &&
+            isset($config['api']['http_server']) &&
+            isset($config['api']['http_server']['enable']) &&
+            $config['api']['http_server']['enable']
+        ) {
+            $server = $this->setupServer($config['api']['http_server']);
+        }
         $application->run($server);
     }
 

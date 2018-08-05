@@ -18,7 +18,8 @@
     "symfony/yaml": "^4.1"
   },
   "scripts": {
-    "start": "php src/api/Stilus.php"
+    "start": "php src/api/Stilus.php",
+    "stop": "kill $(cat ./data/stilus.pid)"
   },
   "require-dev": {
     "phpunit/phpunit": ">=5.7.0",
