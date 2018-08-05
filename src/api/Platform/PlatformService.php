@@ -4,6 +4,7 @@ namespace Stilus\Platform;
 
 final class PlatformService
 {
+
     public function getStatus()
     {
 

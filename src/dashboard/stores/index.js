@@ -6,6 +6,6 @@ const store = new Vuex.Store({
   modules: {
     Home
   }
-})
+});
 
 export default store

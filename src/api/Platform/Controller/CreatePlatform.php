@@ -12,16 +12,11 @@ final class CreatePlatform implements Controller
 {
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
-        $platformDto = $this->validate($request->getParsedBody());
+
     }
 
     public static function getRoute(): Route
     {
         return Route::post('/platform');
-    }
-
-    private function validate(array $params)
-    {
-        
     }
 }
