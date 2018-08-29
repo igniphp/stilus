@@ -83,8 +83,8 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
             $httpConfiguration->setLogFile(STILUS_DIR . DIRECTORY_SEPARATOR . $config['log_file']);
         }
 
-        define('STILUS_SERVER_ENABLED', true);
-        define('STILUS_SERVER_START', time());
+        \define('STILUS_SERVER_ENABLED', true);
+        \define('STILUS_SERVER_START', time());
 
         return new Server($httpConfiguration);
     }
@@ -101,14 +101,16 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
         }
 
         $server = null;
-        if (isset($config['api']) &&
-            isset($config['api']['http_server']) &&
-            isset($config['api']['http_server']['enable']) &&
-            $config['api']['http_server']['enable']
-        ) {
+        if ($this->isServerEnable($config))
+        {
             $server = $this->setupServer($config['api']['http_server']);
         }
         $application->run($server);
+    }
+
+    private function isServerEnable(array $config): bool
+    {
+        return isset($config['api']['http_server']['enable']) && $config['api']['http_server']['enable'];
     }
 
 // Run application in contained scope
