@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-//test commit
+
 namespace Stilus;
 
 use Igni\Application\HttpApplication;
