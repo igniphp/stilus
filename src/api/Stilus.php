@@ -2,8 +2,9 @@
 //test commit
 namespace Stilus;
 
-use Igni\Http\Application;
-use Igni\Http\Server;
+use Igni\Application\HttpApplication;
+use Igni\Network\Server\HttpServer;
+use Igni\Network\Server\Configuration;
 use Stilus\Exception\BootException;
 use Stilus\Platform\PlatformModule;
 use Symfony\Component\Yaml\Yaml;
@@ -38,7 +39,7 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
         require STILUS_VENDOR_AUTOLOADER;
     }
 
-    private function loadApplicationConfig(): array
+    private function loadBootstrapConfig(): array
     {
         if (!is_readable(STILUS_BASE_CONFIG)) {
             throw BootException::forMissingBaseConfiguration();
@@ -51,7 +52,7 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
         }
     }
 
-    private function setupServer(array $config): Server
+    private function setupServer(array $config): HttpServer
     {
         if (!isset($config['port'])) {
             throw BootException::forMissingConfigurationOption('api.http_server.port');
@@ -61,7 +62,7 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
             throw BootException::forMissingConfigurationOption('api.http_server.address');
         }
 
-        $httpConfiguration = new Server\HttpConfiguration($config['address'], (int) $config['port']);
+        $httpConfiguration = new Configuration((int) $config['port'], $config['address']);
 
         if (isset($config['max_connections'])) {
             $httpConfiguration->setMaxConnections((int) $config['max_connections']);
@@ -79,22 +80,18 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
             $httpConfiguration->enableDaemon(STILUS_DIR . DIRECTORY_SEPARATOR . $config['pid_file']);
         }
 
-        if (isset($config['log_file'])) {
-            $httpConfiguration->setLogFile(STILUS_DIR . DIRECTORY_SEPARATOR . $config['log_file']);
-        }
-
         define('STILUS_SERVER_ENABLED', true);
         define('STILUS_SERVER_START', time());
 
-        return new Server($httpConfiguration);
+        return new HttpServer($httpConfiguration);
     }
 
     public function main(): void
     {
         $this->setupAutoload();
 
-        $config = $this->loadApplicationConfig();
-        $application = new Application();
+        $config = $this->loadBootstrapConfig();
+        $application = new HttpApplication();
 
         foreach (STILUS_MODULES as $module) {
             $application->extend($module);
@@ -108,6 +105,12 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
         ) {
             $server = $this->setupServer($config['api']['http_server']);
         }
+
+        $application->getConfig()->set('dir.config', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['config']));
+        $application->getConfig()->set('dir.database', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['database']));
+        $application->getConfig()->set('dir.themes', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['themes']));
+        $application->getConfig()->set('dir.basedir', STILUS_DIR);
+
         $application->run($server);
     }
 

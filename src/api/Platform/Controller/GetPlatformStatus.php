@@ -2,14 +2,20 @@
 
 namespace Stilus\Platform\Controller;
 
-use Igni\Http\Controller;
-use Igni\Http\Router\Route;
-
+use Igni\Application\Http\Controller;
+use Igni\Network\Http\Route;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Stilus\Platform\PlatformService;
 
 final class GetPlatformStatus implements Controller
 {
+    private $platformService;
+
+    public function __construct(PlatformService $platformService)
+    {
+    }
+
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
 
