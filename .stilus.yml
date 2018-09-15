@@ -1,7 +1,6 @@
 paths:
   config: "./data/config"
   database: "./data/db"
-  modules: "./data/modules"
   themes: "./data/themes"
 
 api:

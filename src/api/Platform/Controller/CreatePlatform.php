@@ -2,9 +2,8 @@
 
 namespace Stilus\Platform\Controller;
 
-use Igni\Http\Controller;
-use Igni\Http\Router\Route;
-
+use Igni\Application\Http\Controller;
+use Igni\Network\Http\Route;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

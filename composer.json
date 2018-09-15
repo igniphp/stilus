@@ -12,10 +12,12 @@
   ],
   "require": {
     "php": ">=7.1.0",
-    "igniphp/framework": "^1.4",
+    "igniphp/framework": "^2.0",
     "igniphp/storage": "^0.4.2",
     "igniphp/validation": "^1.1.0",
-    "symfony/yaml": "^4.1"
+    "symfony/yaml": "^4.1",
+    "zendframework/zend-mail": "^2.10",
+    "zendframework/zend-crypt": "^3.3"
   },
   "scripts": {
     "start": "php src/api/Stilus.php",
@@ -35,5 +37,8 @@
     "psr-4": {
       "Stilus\\Tests\\": "tests/api/"
     }
+  },
+  "config": {
+    "process-timeout":0
   }
 }

@@ -23,3 +23,13 @@ npm run build
 ```
 npm run lint
 ```
+
+### Docker
+To setup docker
+`docker-compose up`
+
+Running api server
+`docker-compose run stilus_api composer run`
+
+Running web server
+`docker-compose run stilus_api npm run build`
