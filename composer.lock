@@ -747,16 +747,16 @@
         },
         {
             "name": "igniphp/network",
-            "version": "0.3.2",
+            "version": "0.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/igniphp/network.git",
-                "reference": "ccb5039912d9674ca09678cb3d0a893d2f47a144"
+                "reference": "7692036bf14070e754c1b9ce51950984e7d785e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/igniphp/network/zipball/ccb5039912d9674ca09678cb3d0a893d2f47a144",
-                "reference": "ccb5039912d9674ca09678cb3d0a893d2f47a144",
+                "url": "https://api.github.com/repos/igniphp/network/zipball/7692036bf14070e754c1b9ce51950984e7d785e4",
+                "reference": "7692036bf14070e754c1b9ce51950984e7d785e4",
                 "shasum": ""
             },
             "require": {
@@ -799,7 +799,7 @@
                 "server",
                 "swoole"
             ],
-            "time": "2018-09-13T19:38:24+00:00"
+            "time": "2018-09-15T07:41:05+00:00"
         },
         {
             "name": "igniphp/reflection-api",

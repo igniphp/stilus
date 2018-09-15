@@ -37,5 +37,8 @@
     "psr-4": {
       "Stilus\\Tests\\": "tests/api/"
     }
+  },
+  "config": {
+    "process-timeout":0
   }
 }

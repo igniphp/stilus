@@ -20,4 +20,3 @@ WORKDIR /app
 COPY ./composer*.json ./
 
 CMD ["composer", "install"]
-CMD ["composer", "start"]

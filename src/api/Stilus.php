@@ -2,7 +2,9 @@
 
 namespace Stilus;
 
+use Igni\Application\Config;
 use Igni\Application\HttpApplication;
+use Igni\Container\ServiceLocator;
 use Igni\Network\Server\HttpServer;
 use Igni\Network\Server\Configuration;
 use Stilus\Exception\BootException;
@@ -76,10 +78,6 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
             $httpConfiguration->setMaxRequests((int) $config['max_requests']);
         }
 
-        if (isset($config['pid_file'])) {
-            $httpConfiguration->enableDaemon(STILUS_DIR . DIRECTORY_SEPARATOR . $config['pid_file']);
-        }
-
         define('STILUS_SERVER_ENABLED', true);
         define('STILUS_SERVER_START', time());
 
@@ -91,7 +89,16 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
         $this->setupAutoload();
 
         $config = $this->loadBootstrapConfig();
-        $application = new HttpApplication();
+        $container = new ServiceLocator();
+        $container->share(Config::class, function() use ($config) {
+            return new Config([
+                'dir.basedir', STILUS_DIR,
+                'dir.config' => realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['config']),
+                'dir.database', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['database']),
+                'dir.themes', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['themes']),
+            ]);
+        });
+        $application = new HttpApplication($container);
 
         foreach (STILUS_MODULES as $module) {
             $application->extend($module);
@@ -105,11 +112,6 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
         ) {
             $server = $this->setupServer($config['api']['http_server']);
         }
-
-        $application->getConfig()->set('dir.config', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['config']));
-        $application->getConfig()->set('dir.database', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['database']));
-        $application->getConfig()->set('dir.themes', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['themes']));
-        $application->getConfig()->set('dir.basedir', STILUS_DIR);
 
         $application->run($server);
     }
