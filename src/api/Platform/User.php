@@ -7,9 +7,10 @@ use Igni\Storage\Id\Uuid;
 use Igni\Storage\Mapping\Annotation as Storage;
 use Igni\Storage\Storable;
 use Igni\Validation\Constraint;
+use Stilus\Platform\Exception\UserException;
 
 use function password_hash;
-use Stilus\Platform\Exception\UserException;
+use function password_verify;
 
 /**
  * @Storage\Entity(source="users")
@@ -34,17 +35,11 @@ final class User implements Storable
      */
     private $password;
 
-    /**
-     * @var
-     * @Storage\Property\Text()
-     */
-    private $salt;
-
     public function __construct(string $email, string $password)
     {
         $this->id = new Uuid();
         $this->email = $email;
-        $this->password = $password;
+        $this->createPassword($password);
         $this->validate();
     }
 
@@ -60,18 +55,12 @@ final class User implements Storable
 
     public function validatePassword(string $password): bool
     {
-        return $this->password === $this->generateHash($password);
+        return password_verify($password, $this->password);
     }
 
     public function createPassword(string $password): void
     {
-        $this->salt = bin2hex(random_bytes(10));
-        $this->password = $this->generateHash($password);
-    }
-
-    private function generateHash(string $password): string
-    {
-        return password_hash($password, PASSWORD_BCRYPT, ['salt' => $this->salt]);
+        $this->password = password_hash($password, PASSWORD_BCRYPT);
     }
 
     private function validate()
