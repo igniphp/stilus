@@ -2,7 +2,9 @@
 
 namespace Stilus\Exception;
 
-class RuntimeException extends \RuntimeException implements StilusException
+use RuntimeException as PhpRuntimeException;
+
+class RuntimeException extends PhpRuntimeException implements StilusException
 {
     use ExceptionTrait;
 }

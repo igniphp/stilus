@@ -14,6 +14,7 @@ final class GetPlatformStatus implements Controller
 
     public function __construct(PlatformService $platformService)
     {
+        $this->platformService = $platformService;
     }
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
