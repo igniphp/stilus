@@ -16,6 +16,27 @@ final class PlatformService
         $this->config = $paths;
     }
 
+    public function setLanguage(): void
+    {
+
+    }
+
+    public function setupDatabase(string $host, string $name, string $username, string $password): void
+    {
+
+    }
+
+    public function createAdmin(string $email, string $password): void
+    {
+
+    }
+
+    public function postInstall(): void
+    {
+
+    }
+
+
     public function getStatus()
     {
 

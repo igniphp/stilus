@@ -7,7 +7,7 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         bootstrap="tests/bootstrap.php"
+         bootstrap="tests/api/bootstrap.php"
 >
     <testsuites>
         <testsuite name="All Tests">

@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace StilusTests\Unit\Platform;
+namespace Stilus\Tests\Unit\Platform;
 
 use PHPUnit\Framework\TestCase;
+use Stilus\Exception\ExceptionCode;
 use Stilus\Platform\Exception\UserException;
 use Stilus\Platform\User;
 
@@ -16,6 +17,7 @@ final class UserTest extends TestCase
     public function testFailOnInvalidEmailAddress(): void
     {
         $this->expectException(UserException::class);
+        $this->expectExceptionCode(ExceptionCode::INVALID_USER_EMAIL);
         new User('invalidemail', 'aa');
     }
 

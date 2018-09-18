@@ -2,13 +2,19 @@
 
 namespace Stilus\Platform\Exception;
 
-use Stilus\Exception\Code;
+use Stilus\Exception\EntityNotFound;
+use Stilus\Exception\ExceptionCode;
 use Stilus\Exception\DomainException;
 
-final class UserException extends DomainException
+class UserException extends DomainException
 {
-    public static function forUserCreation(): self
+    public static function forCreationFailure(): self
     {
-        throw new self('Could not create user', Code::INVALID_USER_EMAIL);
+        throw new self('Could not create user', ExceptionCode::INVALID_USER_EMAIL);
+    }
+
+    public static function forNotFound(): self
+    {
+        return new class("User not found", ExceptionCode::USER_NOT_FOUND) extends UserException implements EntityNotFound {};
     }
 }

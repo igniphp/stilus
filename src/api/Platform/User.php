@@ -63,10 +63,21 @@ final class User implements Storable
         $this->password = password_hash($password, PASSWORD_BCRYPT);
     }
 
+    public function changePassword(string $oldPassword, string $newPassword): bool
+    {
+        if (!$this->validatePassword($oldPassword)) {
+            return false;
+        }
+
+        $this->createPassword($newPassword);
+
+        return true;
+    }
+
     private function validate()
     {
         if (!Constraint::email()->validate($this->email)) {
-            throw UserException::forUserCreation();
+            throw UserException::forCreationFailure();
         }
     }
 }

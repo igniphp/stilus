@@ -2,11 +2,11 @@
 
 namespace Stilus\Exception;
 
-final class Code
+final class ExceptionCode
 {
     public const INVALID_USER_EMAIL = 1;
+    public const USER_NOT_FOUND = 2;
 
     private function __construct()
-    {
-    }
+    {}
 }
