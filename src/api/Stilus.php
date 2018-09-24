@@ -1,17 +1,11 @@
 <?php declare(strict_types=1);
 
-use Igni\Application\Config;
 use Igni\Application\HttpApplication;
-use Igni\Container\ServiceLocator;
-use Igni\Network\Server\HttpServer;
 use Igni\Network\Server\Configuration;
-use Igni\Storage\Driver\ConnectionManager;
-use Igni\Storage\Driver\Pdo\Connection;
+use Igni\Network\Server\HttpServer;
 use Stilus\Exception\BootException;
-use Stilus\Platform\PlatformModule;
-use Symfony\Component\Yaml\Yaml;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
+use Stilus\Kernel\System;
+use Igni\Storage\Driver\Connection;
 
 // Composer is autoloading this file even when test are run, this hack stops from
 // excecution while tests are runnnig
@@ -19,49 +13,16 @@ if (defined('STILUS_TEST')) {
     return;
 }
 
-if (version_compare('7.1.0', PHP_VERSION, '>')) {
-    throw BootException::forInvalidPHPVersion(PHP_VERSION);
-}
-
-const STILUS_MODULES = [
-    PlatformModule::class
-];
-
-const STILUS_DIR = __DIR__  . '/../..';
-
-const STILUS_DATA_DIR = STILUS_DIR . '/data';
-
-const STILUS_DB_PATH = STILUS_DATA_DIR . '/stilus.db';
-
-const STILUS_BASE_CONFIG = STILUS_DIR . '/.stilus.yml';
-
-const STILUS_VENDOR_DIR = __DIR__ . '/../../vendor';
-
-const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
+$system = new System();
 
 // Bootstrap
-(new class {
+(new class($system) {
 
-    private function setupAutoload(): void
+    private $system;
+
+    public function __construct(System $system)
     {
-        if (!file_exists(STILUS_VENDOR_AUTOLOADER)) {
-            throw BootException::forMissingComposer();
-        }
-
-        require STILUS_VENDOR_AUTOLOADER;
-    }
-
-    private function loadBootstrapConfig(): array
-    {
-        if (!is_readable(STILUS_BASE_CONFIG)) {
-            throw BootException::forMissingBaseConfiguration();
-        }
-
-        try {
-            return $configuration = Yaml::parseFile(STILUS_BASE_CONFIG);
-        } catch (Throwable $throwable) {
-            throw BootException::forInvalidBaseConfiguration($throwable);
-        }
+        $this->system = $system;
     }
 
     private function setupServer(array $config): HttpServer
@@ -96,24 +57,14 @@ const STILUS_VENDOR_AUTOLOADER = __DIR__ . '/../../vendor/autoload.php';
 
     public function main(): void
     {
-        $this->setupAutoload();
+        $config = $this->system->getBaseConfig();
+        $connection = $this->system->createConnection();
 
-        $config = $this->loadBootstrapConfig();
-        $container = new ServiceLocator();
-        $container->share(Config::class, function() use ($config) {
-            return new Config([
-                'dir.basedir', STILUS_DIR,
-                'dir.config' => realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['config']),
-                'dir.database', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['database']),
-                'dir.themes', realpath(STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['themes']),
-            ]);
-        });
+        $serviceLocator = $this->system->createServiceLocator();
+        $serviceLocator->set(Connection::class, $connection);
+        $application = new HttpApplication($serviceLocator);
 
-        ConnectionManager::register('default', new Connection('sqlite:' . STILUS_DB_PATH));
-
-        $application = new HttpApplication($container);
-
-        foreach (STILUS_MODULES as $module) {
+        foreach (System::STILUS_MODULES as $module) {
             $application->extend($module);
         }
 

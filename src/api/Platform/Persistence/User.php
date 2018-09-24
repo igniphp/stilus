@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Stilus\Platform;
+namespace Stilus\Platform\Persistence;
 
 use Igni\Storage\Id;
 use Igni\Storage\Id\Uuid;

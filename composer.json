@@ -1,6 +1,5 @@
 {
   "name": "igniphp/stilus",
-  "version": "0.0.1",
   "description": "",
   "keywords": [],
   "license": "BSD-3-Clause",
@@ -13,7 +12,7 @@
   "require": {
     "php": ">=7.1.0",
     "igniphp/framework": "^2.0",
-    "igniphp/storage": "^0.4.2",
+    "igniphp/storage": "^0.5.0",
     "igniphp/validation": "^1.1.0",
     "symfony/yaml": "^4.1",
     "zendframework/zend-mail": "^2.10",
@@ -21,12 +20,30 @@
     "league/flysystem": "^1.0"
   },
   "scripts": {
+    "post-install-cmd": [
+
+    ],
+    "post-update-cmd": [
+      "Stilus\\Kernel\\MigrationSynchronizer::synchronize"
+    ],
+    "ci": [
+      "composer validate --no-check-all --strict",
+      "@phpcs",
+      "@test-coverage"
+    ],
     "start": "php src/Stilus.php",
-    "stop": "kill $(cat ./data/stilus.pid)"
+    "stop": "kill $(cat ./data/stilus.pid)",
+    "phpcs": "phpcs --standard=PSR2 src",
+    "test": "phpunit",
+    "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+  },
+  "scripts-descriptions": {
+    "phpcs": "Checks that the application code conforms to coding standard",
+    "test-coverage": "Launches the preconfigured PHPUnit with coverage",
+    "ci": "Continues integration checks"
   },
   "require-dev": {
     "phpunit/phpunit": ">=5.7.0",
-    "mockery/mockery": ">=0.9.4",
     "phpunit/php-code-coverage": ">=4.0.0",
     "fzaninotto/faker": "^1.8"
   },

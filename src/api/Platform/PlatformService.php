@@ -21,7 +21,7 @@ final class PlatformService
 
     }
 
-    public function setupDatabase(string $host, string $name, string $username, string $password): void
+    public function setupDatabase(): void
     {
 
     }

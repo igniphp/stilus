@@ -6,9 +6,12 @@ use Igni\Application\ControllerAggregator;
 use Igni\Application\Providers\ControllerProvider;
 use Igni\Application\Providers\ServiceProvider;
 use Igni\Container\ServiceLocator;
+use Igni\Storage\Driver\Pdo\Connection;
+use Igni\Storage\MigrationManager;
 use Psr\Container\ContainerInterface;
 use Stilus\Platform\Controller\CreatePlatform;
 use Stilus\Platform\Controller\GetPlatformStatus;
+use Stilus\Platform\Persistence\UserSchema;
 
 class PlatformModule implements ControllerProvider, ServiceProvider
 {
@@ -24,5 +27,9 @@ class PlatformModule implements ControllerProvider, ServiceProvider
     public function provideServices(ContainerInterface $container): void
     {
         $container->share(PlatformService::class);
+
+        $container
+            ->get(MigrationManager::class)
+            ->register(UserSchema::create($container));
     }
 }

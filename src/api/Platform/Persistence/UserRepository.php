@@ -1,23 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Stilus\Platform;
+namespace Stilus\Platform\Persistence;
 
 use Igni\Storage\Driver\Pdo\Repository;
 use Stilus\Platform\Exception\UserException;
 
 class UserRepository extends Repository
 {
-    public function createSchema(): void
-    {
-        $cursor = $this->connection->execute('CREATE TABLE IF NOT EXISTS "users" (
-            "id" char(22) PRIMARY KEY NOT NULL,
-            "email" char(128) NOT NULL,
-            "password" char(128) NOT NULL
-          );'
-        );
-        $cursor->execute();
-    }
-
     public function dropSchema(): void
     {
         $cursor = $this->connection->execute('DROP TABLE IF EXISTS "users"');
