@@ -5,7 +5,7 @@ namespace Stilus\Tests\Unit\Platform;
 use PHPUnit\Framework\TestCase;
 use Stilus\Exception\ExceptionCode;
 use Stilus\Platform\Exception\UserException;
-use Stilus\Platform\User;
+use Stilus\Platform\Persistence\User;
 
 final class UserTest extends TestCase
 {

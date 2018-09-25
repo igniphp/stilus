@@ -6,6 +6,7 @@ use Igni\Application\Config;
 use Igni\Container\ServiceLocator;
 use Igni\Storage\Driver\Connection;
 use Igni\Storage\Driver\ConnectionManager;
+use Psr\Container\ContainerInterface;
 use Stilus\Exception\BootException;
 use Stilus\Platform\PlatformModule;
 use Symfony\Component\Yaml\Yaml;
@@ -28,7 +29,7 @@ final class System
     /** @var Config */
     private $config;
 
-    private $serviceLocator;
+    private $container;
 
     public function __construct()
     {
@@ -43,7 +44,7 @@ final class System
         require_once self::STILUS_VENDOR_AUTOLOADER;
     }
 
-    public function createConnection(): Connection
+    public function createDatabaseConnection(): Connection
     {
         if (!ConnectionManager::has('default')) {
             ConnectionManager::register('default', new PdoConnection('sqlite:' . self::STILUS_DB_PATH));
@@ -68,7 +69,7 @@ final class System
         ]);
     }
 
-    public function loadBaseConfig(): array
+    private function loadBaseConfig(): array
     {
         if (!is_readable(self::STILUS_BASE_CONFIG)) {
             throw BootException::forMissingBaseConfiguration();
@@ -83,9 +84,11 @@ final class System
 
     public function createServiceLocator(): ServiceLocator
     {
-        $container = new ServiceLocator();
-        $container->set(Config::class, $this->getBaseConfig());
+        if (!$this->container instanceof ContainerInterface) {
+            $this->container = new ServiceLocator();
+            $this->container->set(Config::class, $this->getBaseConfig());
+        }
 
-        return $container;
+        return $this->container;
     }
 }

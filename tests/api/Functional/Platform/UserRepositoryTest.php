@@ -7,9 +7,10 @@ use Faker\Generator;
 use Igni\Storage\EntityManager;
 use PHPUnit\Framework\TestCase;
 use Stilus\Exception\EntityNotFound;
-use Stilus\Platform\User;
-use Stilus\Platform\UserRepository;
+use Stilus\Platform\Persistence\User;
+use Stilus\Platform\Persistence\UserRepository;
 use Stilus\Tests\StorageTestTrait;
+use Stilus\Platform\Persistence\UserSchema;
 
 final class UserRepositoryTest extends TestCase
 {
@@ -20,9 +21,9 @@ final class UserRepositoryTest extends TestCase
 
     public function setUp()
     {
-        parent::setUp();
         $this->createConnection();
         $this->faker = FakerFactory::create();
+        parent::setUp();
     }
 
     public function testFindByEmail(): void
@@ -52,9 +53,9 @@ final class UserRepositoryTest extends TestCase
     {
         $entityManager = new EntityManager();
         $repository = new UserRepository($entityManager, $this->connection);
-        $repository->dropSchema();
-        $repository->createSchema();
-
+        $schema = new UserSchema($this->connection);
+        $schema->down();
+        $schema->up();
         return $repository;
     }
 

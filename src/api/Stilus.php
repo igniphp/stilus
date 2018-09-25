@@ -58,7 +58,7 @@ $system = new System();
     public function main(): void
     {
         $config = $this->system->getBaseConfig();
-        $connection = $this->system->createConnection();
+        $connection = $this->system->createDatabaseConnection();
 
         $serviceLocator = $this->system->createServiceLocator();
         $serviceLocator->set(Connection::class, $connection);

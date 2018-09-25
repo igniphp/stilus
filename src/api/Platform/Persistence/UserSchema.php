@@ -38,8 +38,8 @@ class UserSchema implements Migration
         return Version::fromString('1.0.0');
     }
 
-    public static function create(ContainerInterface $container): self
+    public static function factory(ContainerInterface $container): self
     {
-        return new self($container->get(Connection::class));
+        return new self($container->get(\Igni\Storage\Driver\Connection::class));
     }
 }

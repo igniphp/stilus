@@ -9,12 +9,19 @@ use Igni\Storage\Storage;
 
 trait StorageTestTrait
 {
+    /** @var Connection */
     private $connection;
+    /** @var EntityManager */
     private $entityManager;
+    /** @var Storage */
     private $storage;
 
-    public function createConnection(string $name = 'test'): Connection
+    public function createConnection(string $name = 'default'): Connection
     {
+        if (ConnectionManager::has($name)) {
+            return $this->connection = ConnectionManager::get($name);
+        }
+
         $this->connection = new Connection('sqlite:' . STILUS_TEST_FIXTURE_DIR . '/test.db');
         ConnectionManager::register($name, $this->connection);
 
