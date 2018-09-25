@@ -49,8 +49,7 @@ final class System
         if (!ConnectionManager::has('default')) {
             ConnectionManager::register('default', new PdoConnection('sqlite:' . self::STILUS_DB_PATH));
         }
-
-
+        
         return ConnectionManager::get('default');
     }
 

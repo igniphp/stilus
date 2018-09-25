@@ -2,6 +2,9 @@
 
 namespace Stilus\Kernel\Migration;
 
+use Igni\Application\Config;
+use Igni\Application\Providers\ConfigProvider;
+use Igni\Application\Providers\ServiceProvider;
 use Igni\Container\ServiceLocator;
 use Igni\Storage\Driver\Connection;
 use Igni\Storage\MigrationManager;
@@ -26,13 +29,25 @@ final class MigrationService
 
     private static function loadModules(ServiceLocator $locator): void
     {
-        $modules = System::STILUS_MODULES;
+        $modules = [];
 
-        foreach ($modules as $module) {
+        foreach (System::STILUS_MODULES as $module) {
             if (!class_exists($module)) {
                 continue;
             }
-            $module = new $module;
+            $modules[] = new $module;
+        }
+
+        foreach ($modules as $module) {
+            if ($module instanceof ConfigProvider) {
+                $module->provideConfig($locator->get(Config::class));
+            }
+        }
+
+        foreach ($modules as $module) {
+            if ($module instanceof ServiceProvider) {
+                $module->provideServices($locator);
+            }
         }
     }
 }
