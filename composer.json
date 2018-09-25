@@ -23,8 +23,9 @@
     "post-install-cmd": [
 
     ],
-    "post-update-cmd": [
-      "Stilus\\Kernel\\MigrationSynchronizer::synchronize"
+    "post-update-cmd": [],
+    "migrate": [
+      "Stilus\\Kernel\\Migration\\MigrationCommand::synchronize"
     ],
     "ci": [
       "composer validate --no-check-all --strict",
@@ -40,7 +41,8 @@
   "scripts-descriptions": {
     "phpcs": "Checks that the application code conforms to coding standard",
     "test-coverage": "Launches the preconfigured PHPUnit with coverage",
-    "ci": "Continues integration checks"
+    "ci": "Continues integration checks",
+    "migrate": "Runs migrations, example usage: composer migration 1.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": ">=5.7.0",

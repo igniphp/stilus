@@ -21,3 +21,4 @@ yarn-error.log*
 *.sln
 *.sw*
 /data/stilus.log
+/coverage.clover

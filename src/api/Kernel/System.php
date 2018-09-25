@@ -4,14 +4,13 @@ namespace Stilus\Kernel;
 
 use Igni\Application\Config;
 use Igni\Container\ServiceLocator;
-use Igni\Storage\Driver\Connection;
 use Igni\Storage\Driver\ConnectionManager;
+use Igni\Storage\Driver\Pdo\Connection;
 use Psr\Container\ContainerInterface;
 use Stilus\Exception\BootException;
 use Stilus\Platform\PlatformModule;
 use Symfony\Component\Yaml\Yaml;
 use Throwable;
-use Igni\Storage\Driver\Pdo\Connection as PdoConnection;
 
 final class System
 {
@@ -47,9 +46,9 @@ final class System
     public function createDatabaseConnection(): Connection
     {
         if (!ConnectionManager::has('default')) {
-            ConnectionManager::register('default', new PdoConnection('sqlite:' . self::STILUS_DB_PATH));
+            ConnectionManager::register('default', new Connection('sqlite:' . self::STILUS_DB_PATH));
         }
-        
+
         return ConnectionManager::get('default');
     }
 
