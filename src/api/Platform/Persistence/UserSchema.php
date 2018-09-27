@@ -18,19 +18,20 @@ class UserSchema implements Migration
 
     public function up(): void
     {
-        $cursor = $this->connection->execute('CREATE TABLE IF NOT EXISTS "users" (
-            "id" char(22) PRIMARY KEY NOT NULL,
-            "email" char(128) NOT NULL,
-            "password" char(128) NOT NULL
-          );'
-        );
-        $cursor->execute();
+        $this->connection
+            ->createCursor('CREATE TABLE IF NOT EXISTS "users" (
+                "id" char(22) PRIMARY KEY NOT NULL,
+                "email" char(128) NOT NULL,
+                "password" char(128) NOT NULL
+            )')
+            ->execute();
     }
 
     public function down(): void
     {
-        $cursor = $this->connection->execute('DROP TABLE IF EXISTS "users"');
-        $cursor->execute();
+        $this->connection
+            ->createCursor('DROP TABLE IF EXISTS "users"')
+            ->execute();
     }
 
     public function getVersion(): Version

@@ -14,7 +14,7 @@ final class VersionSynchronizerTest extends TestCase
     public function setUp()
     {
         $this->createConnection();
-        $this->connection->execute('DROP TABLE migrations')->execute();
+        $this->connection->createCursor('DROP TABLE IF EXISTS migrations')->execute();
         parent::setUp();
     }
 
@@ -34,7 +34,7 @@ final class VersionSynchronizerTest extends TestCase
 
         self::assertTrue($synchronizer->getVersion()->equalsLiteral('1.2.0'));
 
-        $cursor = $this->connection->execute('SELECT *FROM migrations');
+        $cursor = $this->connection->createCursor('SELECT *FROM migrations');
         self::assertCount(2, $cursor->toArray());
     }
 }

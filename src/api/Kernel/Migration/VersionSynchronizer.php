@@ -19,7 +19,7 @@ class VersionSynchronizer implements MigrationVersionSynchronizer
 
     private function prepareMigrationTable(): void
     {
-        $cursor = $this->connection->execute(
+        $cursor = $this->connection->createCursor(
             "SELECT name FROM sqlite_master WHERE type='table' AND name='migrations'"
         );
 
@@ -32,7 +32,7 @@ class VersionSynchronizer implements MigrationVersionSynchronizer
 
     private function createMigrationTable(): void
     {
-        $cursor = $this->connection->execute(
+        $cursor = $this->connection->createCursor(
             "CREATE TABLE migrations (
               major INTEGER NOT NULL DEFAULT 0, 
               minor INTEGER NOT NULL DEFAULT 0, 
@@ -45,7 +45,7 @@ class VersionSynchronizer implements MigrationVersionSynchronizer
 
     public function getVersion(): Version
     {
-        $cursor = $this->connection->execute(
+        $cursor = $this->connection->createCursor(
             'SELECT major, minor, patch FROM migrations ORDER BY major DESC, minor DESC, patch DESC'
         );
 
@@ -61,7 +61,7 @@ class VersionSynchronizer implements MigrationVersionSynchronizer
 
     public function setVersion(Version $version): void
     {
-        $cursor = $this->connection->execute(
+        $cursor = $this->connection->createCursor(
             'INSERT INTO migrations (major, minor, patch) VALUES (:major, :minor, :patch)',
             [
                 $version->getMajor(),

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4962ffe985eaf2b5c9d1a793169fb870",
+    "content-hash": "4fd5a2c04cb0024fbbe9742a325534d2",
     "packages": [
         {
             "name": "cache/adapter-common",
@@ -843,16 +843,16 @@
         },
         {
             "name": "igniphp/storage",
-            "version": "0.5.0",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/igniphp/storage.git",
-                "reference": "6ee58943a600c0941ede63867a8e46fdd41d88e6"
+                "reference": "dbfa7f0a29a67f02b113efe448346f195180bcf8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/igniphp/storage/zipball/6ee58943a600c0941ede63867a8e46fdd41d88e6",
-                "reference": "6ee58943a600c0941ede63867a8e46fdd41d88e6",
+                "url": "https://api.github.com/repos/igniphp/storage/zipball/dbfa7f0a29a67f02b113efe448346f195180bcf8",
+                "reference": "dbfa7f0a29a67f02b113efe448346f195180bcf8",
                 "shasum": ""
             },
             "require": {
@@ -911,7 +911,7 @@
                 "sqlite",
                 "unit of work"
             ],
-            "time": "2018-09-23T11:24:48+00:00"
+            "time": "2018-09-27T06:35:43+00:00"
         },
         {
             "name": "igniphp/uuid",

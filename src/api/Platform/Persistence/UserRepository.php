@@ -7,12 +7,6 @@ use Stilus\Platform\Exception\UserException;
 
 class UserRepository extends Repository
 {
-    public function dropSchema(): void
-    {
-        $cursor = $this->connection->execute('DROP TABLE IF EXISTS "users"');
-        $cursor->execute();
-    }
-
     public function findUserByEmail(string $email): User
     {
         $cursor = $this->query(
