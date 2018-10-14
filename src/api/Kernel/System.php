@@ -14,16 +14,15 @@ use Throwable;
 
 final class System
 {
-    public const STILUS_MODULES = [
+    public const DIR = __DIR__ . '/../../..';
+    public const DATA_DIR = self::DIR . '/data';
+    public const DB_PATH = self::DATA_DIR . '/stilus.db';
+    public const VENDOR_DIR = self::DIR . '/vendor';
+    public const VENDOR_AUTOLOADER = self::VENDOR_DIR . '/autoload.php';
+    public const BASE_CONFIG = self::DIR . '/.stilus.yml';
+    public const BASE_MODULES = [
         PlatformModule::class,
     ];
-
-    public const STILUS_DIR = __DIR__ . '/../../..';
-    public const STILUS_DATA_DIR = self::STILUS_DIR . '/data';
-    public const STILUS_DB_PATH = self::STILUS_DATA_DIR . '/stilus.db';
-    public const STILUS_BASE_CONFIG = self::STILUS_DIR . '/.stilus.yml';
-    public const STILUS_VENDOR_DIR = self::STILUS_DIR . '/vendor';
-    public const STILUS_VENDOR_AUTOLOADER = self::STILUS_VENDOR_DIR . '/autoload.php';
 
     /** @var Config */
     private $config;
@@ -36,17 +35,17 @@ final class System
             throw BootException::forInvalidPHPVersion(PHP_VERSION);
         }
 
-        if (!file_exists(self::STILUS_VENDOR_AUTOLOADER)) {
+        if (!file_exists(self::VENDOR_AUTOLOADER)) {
             throw BootException::forMissingComposer();
         }
 
-        require_once self::STILUS_VENDOR_AUTOLOADER;
+        require_once self::VENDOR_AUTOLOADER;
     }
 
     public function createDatabaseConnection(): Connection
     {
         if (!ConnectionManager::has('default')) {
-            ConnectionManager::register('default', new Connection('sqlite:' . self::STILUS_DB_PATH));
+            ConnectionManager::register('default', new Connection('sqlite:' . self::DB_PATH));
         }
 
         return ConnectionManager::get('default');
@@ -60,21 +59,21 @@ final class System
 
         $config = $this->loadBaseConfig();
         return $this->config = new Config([
-            'dir.basedir', System::STILUS_DIR,
-            'dir.config' => realpath(System::STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['config']),
-            'dir.database', realpath(System::STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['database']),
-            'dir.themes', realpath(System::STILUS_DIR . DIRECTORY_SEPARATOR . $config['paths']['themes']),
+            'dir.basedir' => System::DIR,
+            'dir.config' => realpath(System::DIR . DIRECTORY_SEPARATOR . $config['paths']['config']),
+            'dir.database' => realpath(System::DIR . DIRECTORY_SEPARATOR . $config['paths']['database']),
+            'dir.themes' => realpath(System::DIR . DIRECTORY_SEPARATOR . $config['paths']['themes']),
         ]);
     }
 
     private function loadBaseConfig(): array
     {
-        if (!is_readable(self::STILUS_BASE_CONFIG)) {
+        if (!is_readable(self::BASE_CONFIG)) {
             throw BootException::forMissingBaseConfiguration();
         }
 
         try {
-            return $configuration = Yaml::parseFile(self::STILUS_BASE_CONFIG);
+            return $configuration = Yaml::parseFile(self::BASE_CONFIG);
         } catch (Throwable $throwable) {
             throw BootException::forInvalidBaseConfiguration($throwable);
         }

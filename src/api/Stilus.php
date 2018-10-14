@@ -6,6 +6,7 @@ use Igni\Network\Server\HttpServer;
 use Stilus\Exception\BootException;
 use Stilus\Kernel\System;
 use Igni\Storage\Driver\Connection;
+use OpenApi\Annotations as Doc;
 
 // Composer is autoloading this file even when test are run, this hack stops from
 // excecution while tests are runnnig
@@ -13,6 +14,18 @@ if (defined('STILUS_TEST')) {
     return;
 }
 
+const STILUS_VERSION = "1.0.0";
+
+/**
+ * @Doc\Info(
+ *     version=STILUS_VERSION,
+ *     title="Stilus API",
+ *     @Doc\License(
+ *         name="BSD-3-Clause",
+ *         url="https://www.opensource.org/licenses/BSD-3-Clause"
+ *     )
+ * )
+ */
 $system = new System();
 
 // Bootstrap
@@ -69,7 +82,10 @@ $system = new System();
         }
 
         $server = null;
-        if (isset($config['api']) &&
+
+        // Server should be only available in sapi mode and when proper config is set
+        if (php_sapi_name() == "cli" &&
+            isset($config['api']) &&
             isset($config['api']['http_server']) &&
             isset($config['api']['http_server']['enable']) &&
             $config['api']['http_server']['enable']

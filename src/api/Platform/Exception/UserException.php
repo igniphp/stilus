@@ -6,7 +6,7 @@ use Stilus\Exception\EntityNotFound;
 use Stilus\Exception\ExceptionCode;
 use Stilus\Exception\DomainException;
 
-class UserException extends DomainException
+class UserException extends DomainException implements PlatformException
 {
     public static function forCreationFailure(): self
     {

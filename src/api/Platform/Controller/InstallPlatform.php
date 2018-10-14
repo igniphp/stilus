@@ -4,11 +4,30 @@ namespace Stilus\Platform\Controller;
 
 use Igni\Application\Http\Controller;
 use Igni\Network\Http\Route;
+use OpenApi\Annotations as Doc;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Stilus\Platform\PlatformService;
 
-final class CreatePlatform implements Controller
+/**
+ * @Doc\Post(
+ *     path="/platform",
+ *     summary="Performs platform installation",
+ *     tags={"platform"},
+ *     operationId="platformInstall",
+ *     @Doc\Response(
+ *         response=201,
+ *         description="Platform successfully installed",
+ *         @Doc\Schema(ref="#/components/schemas/Platform")
+ *     ),
+ *     @Doc\Response(
+ *         response="default",
+ *         description="Unexpected error",
+ *         @Doc\Schema(ref="#/components/schemas/Error")
+ *     )
+ * )
+ */
+final class InstallPlatform implements Controller
 {
     private $platformService;
 

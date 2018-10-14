@@ -39,7 +39,7 @@ final class MigrationCommand
     {
         $modules = [];
 
-        foreach (System::STILUS_MODULES as $module) {
+        foreach (System::BASE_MODULES as $module) {
             if (!class_exists($module)) {
                 continue;
             }
